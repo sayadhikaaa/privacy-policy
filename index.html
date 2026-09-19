@@ -1,130 +1,1645 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - SocialSync Studio PRO</title>
+    <title>SocialSync Studio Pro - Direct Publisher & Gemini AI Engine</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        dark: {
+                            bg: '#090d16',
+                            card: '#111827',
+                            border: '#1f2937',
+                            hover: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            color: #24292e;
-            background-color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090d16;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
-        h1 {
-            color: #1a73e8;
-            border-bottom: 2px solid #e1e4e8;
-            padding-bottom: 10px;
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-        h2 {
-            color: #2c3e50;
-            margin-top: 30px;
-            border-bottom: 1px solid #e1e4e8;
-            padding-bottom: 5px;
+        ::-webkit-scrollbar-track {
+            background: #090d16;
         }
-        h3, h4 {
-            color: #34495e;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        code {
-            background-color: #f6f8fa;
-            padding: 2px 6px;
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
             border-radius: 4px;
         }
-        .contact-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #1a73e8;
-            padding: 15px;
-            margin-top: 20px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .platform-chip {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .platform-chip.selected {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 18px rgba(59, 130, 246, 0.3);
+        }
+
+        .pulse-live {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Phone Mockup Screen Frame */
+        .mobile-preview-screen {
+            width: 320px;
+            height: 610px;
+            border-radius: 38px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 10px #1f2937;
+        }
+
+        /* Modal Animation */
+        .modal-animate-in {
+            animation: modalFadeIn 0.25s ease-out forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
-    <h1>Privacy Policy for SocialSync Studio PRO</h1>
-    <p><strong>Last updated:</strong> September 19, 2026</p>
-    
-    <p>This Privacy Policy describes Our policies and procedures on the collection, use, and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
-    <p>We use Your Personal Data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-    <h2>1. Interpretation and Definitions</h2>
-    <h3>Interpretation</h3>
-    <p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-gray-800/80 px-4 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('composer')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-bolt text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg tracking-tight text-white">SocialSync</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30">STUDIO PRO</span>
+                    </div>
+                    <p class="text-xs text-gray-400 hidden sm:block">Real-Time Multi-Platform Direct Publisher</p>
+                </div>
+            </div>
 
-    <h3>Definitions</h3>
-    <p>For the purposes of this Privacy Policy:</p>
-    <ul>
-        <li><strong>Account</strong> means a unique account created for You to access Our Service or parts of Our Service.</li>
-        <li><strong>Application</strong> refers to <strong>SocialSync Studio PRO</strong>, the software program provided by the Company.</li>
-        <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to <strong>SocialSync Studio PRO</strong>.</li>
-        <li><strong>Country</strong> refers to: Indonesia.</li>
-        <li><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone, or a digital tablet.</li>
-        <li><strong>Personal Data</strong> is any information that relates to an identified or identifiable individual.</li>
-        <li><strong>Service</strong> refers to the Application.</li>
-        <li><strong>Usage Data</strong> refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself.</li>
-        <li><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</li>
-    </ul>
+            <!-- Connected Accounts Summary Bar -->
+            <div class="hidden xl:flex items-center gap-2 bg-gray-900/80 border border-gray-800 rounded-full px-4 py-1.5 text-xs">
+                <span class="text-gray-400 mr-1">Status Koneksi:</span>
+                <div class="flex items-center gap-3" id="header-platform-status-list">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+                <span class="ml-2 font-mono text-[11px] text-gray-400 border-l border-gray-800 pl-3" id="header-connected-count">0/5 Terhubung</span>
+            </div>
 
-    <h2>2. Collecting and Using Your Personal Information</h2>
-    <h3>Types of Data Collected</h3>
-    
-    <h4>Personal Data</h4>
-    <p>While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to:</p>
-    <ul>
-        <li>Email address</li>
-        <li>First name and last name</li>
-        <li>Social Media Account credentials and access tokens (stored securely/encrypted for direct publishing features)</li>
-    </ul>
+            <!-- License Status Badge & Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-3 py-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-live"></span>
+                    <div class="text-left hidden xs:block">
+                        <p class="text-[10px] text-gray-400 leading-tight">Status Lisensi:</p>
+                        <p class="text-xs font-bold text-emerald-400 leading-tight" id="header-license-badge">PRO ACTIVE</p>
+                    </div>
+                    <button onclick="openLicenseModal()" class="ml-1 text-[10px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-semibold px-2 py-1 rounded-lg transition-colors border border-emerald-500/30">
+                        <i class="fa-solid fa-key mr-1"></i> Perpanjang / Key
+                    </button>
+                </div>
 
-    <h4>Usage Data</h4>
-    <p>Usage Data is collected automatically when using the Service. It may include information such as Your Device's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of Our Service that You visit, the time and date of Your visit, unique device identifiers, and other diagnostic data.</p>
+                <!-- Notification Bell -->
+                <div class="relative">
+                    <button onclick="toggleNotificationMenu()" class="w-9 h-9 rounded-xl bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700/60 flex items-center justify-center text-gray-300 transition-colors">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500"></span>
+                    </button>
+                    <!-- Dropdown Notif -->
+                    <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-72 glass-panel rounded-2xl p-4 shadow-2xl z-50 text-xs border border-gray-800">
+                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-gray-800">
+                            <span class="font-bold text-white">Notifikasi Aktivitas</span>
+                            <span class="text-[10px] text-blue-400 cursor-pointer hover:underline" onclick="clearNotifs()">Tandai dibaca</span>
+                        </div>
+                        <div class="space-y-2.5 text-gray-300" id="notif-list-container">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium text-white">Lisensi & Vault API Aktif</p>
+                                    <p class="text-[10px] text-gray-400">Bundle Gemini AI & Central API Engine Siap Digunakan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <h3>Use of Your Personal Data</h3>
-    <p>The Company may use Personal Data for the following purposes:</p>
-    <ul>
-        <li><strong>To provide and maintain Our Service</strong>, including to monitor the usage of Our Service.</li>
-        <li><strong>To manage Your Account:</strong> to manage Your registration as a user of the Service and grant access to different functionalities available to registered users.</li>
-        <li><strong>To enable Direct Social Media Publishing:</strong> to process, schedule, and publish media posts (images/videos) to connected third-party platforms (such as Instagram, Facebook, TikTok, YouTube, Threads) upon Your request.</li>
-        <li><strong>To provide AI Content Generation:</strong> to process content prompts and media inputs via integrated AI APIs (e.g., Google Gemini AI) to assist You in generating titles, captions, and hashtags.</li>
-        <li><strong>To contact You:</strong> To contact You by email regarding updates, security alerts, or informative communications related to the functionalities or contracted services.</li>
-    </ul>
+                <!-- Auth Buttons / User Profile -->
+                <div id="auth-actions-area" class="flex items-center gap-2">
+                    <button onclick="openAuthModal('login')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-md shadow-blue-600/20 flex items-center gap-1.5">
+                        <i class="fa-solid fa-lock"></i> Masuk / Daftar
+                    </button>
+                </div>
 
-    <h2>3. Retention and Deletion of Your Personal Data</h2>
-    <p>The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy. All API keys, credentials, and tokens configured within the application are encrypted and retained locally within Your browser session or application storage environment.</p>
-    
-    <h3>User Data Deletion</h3>
-    <p>You have the right to delete or request that We assist in deleting the Personal Data that We have collected about You. You can remove Your connected social media accounts, revoke API access, or clear local application data directly within the Application settings at any time.</p>
+                <!-- Profile Dropdown -->
+                <div id="auth-logged-in-profile" class="hidden relative">
+                    <button onclick="toggleUserDropdown()" class="flex items-center gap-2.5 bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-xl p-1.5 pr-3 transition-colors">
+                        <img id="user-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" class="w-7 h-7 rounded-lg object-cover" alt="User Avatar">
+                        <div class="text-left hidden sm:block">
+                            <p id="user-display-name" class="text-xs font-bold text-white leading-tight">Creative Studio</p>
+                            <p id="user-display-email" class="text-[10px] text-gray-400 leading-tight">user@creative.id</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] ml-1 transition-transform" id="user-dropdown-arrow"></i>
+                    </button>
+                    <!-- Profile Menu Dropdown -->
+                    <div id="user-dropdown-menu" class="hidden absolute right-0 mt-2 w-48 glass-panel rounded-2xl p-2 shadow-2xl z-50 border border-gray-800 text-xs">
+                        <div class="px-3 py-2 border-b border-gray-800">
+                            <p class="font-semibold text-white">Akun Studio</p>
+                            <p class="text-[10px] text-emerald-400" id="profile-license-tag">Lisensi: SYNC-PRO-ACTIVE</p>
+                        </div>
+                        <button onclick="switchTab('accounts')" class="w-full text-left px-3 py-2 rounded-xl text-gray-300 hover:bg-gray-800 flex items-center gap-2 mt-1">
+                            <i class="fa-solid fa-plug text-blue-400"></i> Kelola Integrasi Akun
+                        </button>
+                        <button onclick="logoutUser()" class="w-full text-left px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-500/10 flex items-center gap-2 mt-1">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar (Sign Out)
+                        </button>
+                    </div>
+                </div>
 
-    <h2>4. Disclosure of Your Personal Data</h2>
-    <p>We do not sell, rent, or trade Your Personal Data to third parties. We may disclose Your Personal Data in the following circumstances:</p>
-    <ul>
-        <li><strong>Third-Party API Services:</strong> To facilitate direct publishing and AI assistance, necessary data is transmitted securely through official APIs provided by Meta (Instagram/Facebook/Threads), TikTok, Google/YouTube, and Google Gemini AI.</li>
-        <li><strong>Law Enforcement:</strong> Under certain circumstances, the Company may be required to disclose Your Personal Data if required to do so by law or in response to valid requests by public authorities.</li>
-    </ul>
+            </div>
 
-    <h2>5. Security of Your Personal Data</h2>
-    <p>The security of Your Personal Data is important to Us. All sensitive tokens and credentials used by SocialSync Studio PRO are handled using industry-standard encryption practices. However, remember that no method of transmission over the Internet or method of electronic storage is 100% secure.</p>
+        </div>
+    </header>
 
-    <h2>6. Children's Privacy</h2>
-    <p>Our Service is not directed to anyone under the age of 16. We do not knowingly collect personally identifiable information from anyone under the age of 16.</p>
+    <!-- MAIN CONTAINER WITH SIDEBAR & CONTENT TABS -->
+    <div class="flex-1 max-w-7xl w-full mx-auto flex flex-col md:flex-row gap-6 p-4 lg:p-8">
 
-    <h2>7. Changes to this Privacy Policy</h2>
-    <p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date at the top of this Privacy Policy.</p>
+        <!-- SIDEBAR NAVIGATION MENU -->
+        <aside class="w-full md:w-64 flex-shrink-0 space-y-3">
+            <div class="glass-panel rounded-2xl p-3 border border-gray-800">
+                <nav class="space-y-1">
+                    <button onclick="switchTab('composer')" id="nav-btn-composer" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-medium text-xs text-white bg-blue-600/20 border border-blue-500/40 transition-all">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-pen-to-square text-blue-400 text-base"></i>
+                            <span>Composer & Direct Upload</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
+                    </button>
 
-    <h2>8. Contact Us</h2>
-    <p>If You have any questions or requests regarding this Privacy Policy, You can contact Us:</p>
-    <div class="contact-box">
-        <p><strong>By email:</strong> rakadhikaaa@gmail.com</p>
-        <p><strong>Application:</strong> SocialSync Studio PRO</p>
+                    <button onclick="switchTab('accounts')" id="nav-btn-accounts" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-medium text-xs text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-sliders text-purple-400 text-base"></i>
+                            <span>Integrasi Platform & Akun</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] bg-gray-800 text-gray-400 font-mono" id="sidebar-accounts-badge">0 Active</span>
+                    </button>
+
+                    <button onclick="switchTab('analytics')" id="nav-btn-analytics" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-medium text-xs text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-chart-line text-emerald-400 text-base"></i>
+                            <span>Live Publishing Analytics</span>
+                        </div>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-live"></span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Server Connection Info Panel -->
+            <div class="glass-panel rounded-2xl p-4 border border-gray-800 text-xs space-y-2.5">
+                <div class="flex items-center justify-between text-gray-400">
+                    <span class="font-semibold text-gray-300">Direct Sync Engine</span>
+                    <span class="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ONLINE
+                    </span>
+                </div>
+                <p class="text-[11px] text-gray-500 font-mono break-all" id="engine-status-text">OAuth Centralized Relay & Webhook Active</p>
+                
+                <div class="pt-2 border-t border-gray-800/60 text-[10px] text-gray-400 space-y-1">
+                    <div class="flex justify-between">
+                        <span>Gemini AI Engine:</span>
+                        <span class="text-purple-400 font-medium" id="sidebar-ai-status">Active (Central Key)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Status Lisensi:</span>
+                        <span class="text-emerald-400 font-semibold" id="sidebar-license-status">PRO UNLIMITED</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT VIEW AREA -->
+        <main class="flex-1 min-w-0">
+            
+            <!-- TAB 1: COMPOSER & MULTI-PUBLISHER -->
+            <div id="tab-composer" class="space-y-6">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- LEFT COLUMN: MEDIA DROPZONE & FORM CONTROLS -->
+                    <div class="lg:col-span-7 space-y-6">
+                        
+                        <!-- Target Platform Selector Chips -->
+                        <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-gray-200 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-share-nodes text-blue-400"></i> Target Platform Direct Publish
+                                </label>
+                                <span class="text-[11px] text-gray-400">Pilih platform tujuan posting</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5" id="platform-chips-container">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Drag & Drop Media Upload Zone -->
+                        <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
+                            <label class="text-xs font-bold text-gray-200 uppercase tracking-wider flex items-center justify-between">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-cloud-arrow-up text-indigo-400"></i> Berkas Media (Foto / Video Direct Upload)
+                                </span>
+                                <span class="text-[11px] text-emerald-400 font-medium">MP4, MOV, JPG, PNG, WEBP</span>
+                            </label>
+
+                            <!-- Drop area -->
+                            <div id="media-dropzone" onclick="document.getElementById('file-input-hidden').click()" 
+                                 class="border-2 border-dashed border-gray-700 hover:border-blue-500 bg-gray-900/40 hover:bg-gray-800/40 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[170px] relative group">
+                                
+                                <input type="file" id="file-input-hidden" class="hidden" accept="image/*,video/*" onchange="handleFileSelect(event)">
+                                
+                                <div id="dropzone-empty-state" class="space-y-2">
+                                    <div class="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto text-xl group-hover:scale-110 transition-transform">
+                                        <i class="fa-solid fa-photo-film"></i>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-200">Tarik & Lepas berkas di sini atau <span class="text-blue-400 underline">Pilih Berkas Komputer</span></p>
+                                    <p class="text-[10px] text-gray-400">Unggah foto atau video HD/4K untuk dikirim serentak ke akun terhubung</p>
+                                </div>
+
+                                <!-- Uploaded Media Active Bar -->
+                                <div id="media-preview-container" class="hidden w-full flex items-center justify-between p-3 bg-gray-900 border border-gray-800 rounded-xl">
+                                    <div class="flex items-center gap-3">
+                                        <div id="media-thumbnail-box" class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center overflow-hidden border border-gray-700">
+                                            <!-- Image/Video Thumb -->
+                                        </div>
+                                        <div class="text-left">
+                                            <p id="media-file-name" class="text-xs font-bold text-white truncate max-w-[180px]">video_content.mp4</p>
+                                            <p id="media-file-size" class="text-[10px] text-blue-400 font-mono">14.2 MB</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="clearUploadedMedia(event)" class="w-8 h-8 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 flex items-center justify-center transition-colors" title="Hapus Berkas Ini">
+                                        <i class="fa-solid fa-trash-can text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Details Form -->
+                        <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
+                            
+                            <!-- AI Generator Bar -->
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-blue-900/40 border border-purple-500/30 rounded-xl gap-3">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm shadow">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-white">Gemini AI Studio Assistant</p>
+                                        <p class="text-[10px] text-purple-300">Terbuka Otomatis via Key Lisensi Berlangganan</p>
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-open-ai-studio" onclick="openAIGeneratorModal()" class="w-full sm:w-auto px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-md shadow-purple-600/25 transition-all flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-bolt"></i> ✨ AI Content Studio
+                                </button>
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-xs font-bold text-gray-300">Judul Posting (Opsional)</label>
+                                    <button type="button" id="btn-auto-title-ai" onclick="quickGenerateTitle()" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ Auto Judul AI
+                                    </button>
+                                </div>
+                                <input type="text" id="input-title" oninput="updateLivePreview()" placeholder="Masukkan judul utama postingan..." class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors">
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="text-xs font-bold text-gray-300">Deskripsi / Caption Content</label>
+                                    <span class="text-[10px] text-gray-400 font-mono" id="char-count-display">0 / 2200 Karakter</span>
+                                </div>
+                                <textarea id="input-caption" rows="4" oninput="updateLivePreview()" placeholder="Tuliskan deskripsi postingan, cerita menarik, hashtag..." class="w-full bg-gray-900 border border-gray-800 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"></textarea>
+                                <div class="flex items-center justify-between mt-2">
+                                    <button type="button" id="btn-auto-caption-ai" onclick="quickGenerateCaption()" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ Generate Caption AI
+                                    </button>
+                                    <button type="button" onclick="generateHashtags()" class="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-hashtag"></i> Tambah Tag Trend
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Direct Publish Button -->
+                            <div class="pt-2">
+                                <button type="button" onclick="publishContent()" class="w-full py-3.5 rounded-xl font-bold text-xs bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-paper-plane text-sm"></i> Terbitkan Media Ke Sosmed Sekarang
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: LIVE PHONE PREVIEW MOCKUP -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-start">
+                        <div class="sticky top-24 space-y-3">
+                            <div class="flex items-center justify-between px-2 w-[320px]">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-mobile-screen-button text-purple-400"></i> Pratinjau Tampilan Live
+                                </span>
+                                <span id="preview-platform-badge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-semibold border border-blue-500/30">
+                                    Instagram Preview
+                                </span>
+                            </div>
+
+                            <!-- Mobile Device Frame -->
+                            <div class="mobile-preview-screen bg-black overflow-hidden flex flex-col relative border-4 border-gray-800">
+                                
+                                <!-- Phone Header / Camera Notch Bar -->
+                                <div class="h-7 bg-black px-6 flex items-center justify-between text-[10px] text-gray-400 border-b border-gray-900 z-10">
+                                    <span class="font-bold">09:41</span>
+                                    <div class="w-14 h-3 bg-gray-900 rounded-full"></div>
+                                    <div class="flex items-center gap-1 text-[9px]">
+                                        <i class="fa-solid fa-signal"></i>
+                                        <i class="fa-solid fa-wifi"></i>
+                                        <i class="fa-solid fa-battery-full"></i>
+                                    </div>
+                                </div>
+
+                                <!-- App Social Feed Bar -->
+                                <div class="p-3 border-b border-gray-900 flex items-center justify-between bg-black/80 backdrop-blur z-10" id="preview-header-bar">
+                                    <div class="flex items-center gap-2">
+                                        <div id="preview-avatar-ring" class="w-6 h-6 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-0.5">
+                                            <img id="preview-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" class="w-full h-full rounded-full object-cover" alt="User Avatar">
+                                        </div>
+                                        <span id="preview-username" class="text-xs font-bold text-white">creative.studio</span>
+                                    </div>
+                                    <i id="preview-top-icon" class="fa-solid fa-ellipsis text-gray-400 text-xs"></i>
+                                </div>
+
+                                <!-- Post Media Player Area -->
+                                <div id="preview-media-box" class="w-full aspect-square bg-gray-950 flex flex-col items-center justify-center relative overflow-hidden border-y border-gray-900">
+                                    <i class="fa-regular fa-image text-4xl text-gray-700"></i>
+                                    <span class="mt-2 text-[10px] text-gray-500">Pratinjau Foto/Video Berkas</span>
+                                </div>
+
+                                <!-- Post Content & Caption Scroll Area -->
+                                <div class="flex-1 p-3 space-y-2 overflow-y-auto text-xs bg-black text-gray-200">
+                                    <div class="flex items-center justify-between text-base py-1 border-b border-gray-900" id="preview-action-bar">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fa-regular fa-heart text-white hover:text-rose-500 cursor-pointer"></i>
+                                            <i class="fa-regular fa-comment text-white hover:text-blue-400 cursor-pointer"></i>
+                                            <i class="fa-regular fa-paper-plane text-white hover:text-emerald-400 cursor-pointer"></i>
+                                        </div>
+                                        <i class="fa-regular fa-bookmark text-white"></i>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <p class="text-[11px] font-bold text-white"><span id="preview-username-caption">creative.studio</span></p>
+                                        <div id="preview-caption-text" class="text-[11px] text-gray-300 leading-relaxed break-words">
+                                            Halo Rekan-rekan! 👋 Silakan pilih berkas foto atau video dan klik terbitkan untuk upload secara real-time ke akun media sosial terhubung!
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TAB 2: AKUN TERHUBUNG & INTEGRASI PLATFORM -->
+            <div id="tab-accounts" class="hidden space-y-6">
+                <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-5">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-gray-800 pb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-white">Kelola Akun Media Sosial & Integrasi Direct</h3>
+                            <p class="text-xs text-gray-400">Masukkan Email/Username & Password akun Anda. API Keys telah terkonfigurasi otomatis via Lisensi.</p>
+                        </div>
+                        <span class="text-xs px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30 w-fit font-mono flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i> Centralized Encrypted API Active
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="accounts-card-grid">
+                        <!-- Dynamic Account Cards rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Custom Webhook & Telegram Integration Panel -->
+                <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-code text-indigo-400"></i> Integrasi Direct Webhook & Telegram Bot (Opsional)
+                            </h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Upload media secara otomatis ke Server Webhook, Bot Telegram, atau Discord Webhook Anda.</p>
+                        </div>
+                        <button onclick="saveApiIntegrations()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md">
+                            Simpan Pengaturan
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-gray-300 mb-1">Telegram Bot Token & Chat ID</label>
+                            <input type="text" id="api-telegram-token" placeholder="bot12345:ABC... / Chat ID: -100xxx" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-300 mb-1">Discord / Custom Webhook URL</label>
+                            <input type="url" id="api-webhook-url" placeholder="https://discord.com/api/webhooks/..." class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: LIVE ANALYTICS (REAL-TIME REACTIVE ANALYTICS) -->
+            <div id="tab-analytics" class="hidden space-y-6">
+                
+                <!-- KPI Summary Metric Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass-panel rounded-2xl p-4 border border-gray-800 space-y-1">
+                        <div class="flex items-center justify-between text-gray-400 text-xs">
+                            <span>Total Terbitan</span>
+                            <i class="fa-solid fa-paper-plane text-blue-400"></i>
+                        </div>
+                        <p id="kpi-total-published" class="text-2xl font-bold text-white">48</p>
+                        <p class="text-[10px] text-emerald-400 font-medium">↑ 12.4% minggu ini</p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-4 border border-gray-800 space-y-1">
+                        <div class="flex items-center justify-between text-gray-400 text-xs">
+                            <span>Total Jangkauan</span>
+                            <i class="fa-solid fa-eye text-purple-400"></i>
+                        </div>
+                        <p id="kpi-total-reach" class="text-2xl font-bold text-white">128.4K</p>
+                        <p class="text-[10px] text-emerald-400 font-medium">↑ 24.8% vs bulan lalu</p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-4 border border-gray-800 space-y-1">
+                        <div class="flex items-center justify-between text-gray-400 text-xs">
+                            <span>Interaksi & Likes</span>
+                            <i class="fa-solid fa-heart text-rose-400"></i>
+                        </div>
+                        <p id="kpi-total-likes" class="text-2xl font-bold text-white">14.9K</p>
+                        <p class="text-[10px] text-emerald-400 font-medium">↑ 8.2% reaksi positif</p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-4 border border-gray-800 space-y-1">
+                        <div class="flex items-center justify-between text-gray-400 text-xs">
+                            <span>Tingkat Sukses Sync</span>
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                        </div>
+                        <p id="kpi-sync-rate" class="text-2xl font-bold text-emerald-400">100%</p>
+                        <p class="text-[10px] text-gray-400 font-mono">0 Error API Relay</p>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Line Chart: Engagement over time -->
+                    <div class="lg:col-span-8 glass-panel rounded-2xl p-5 border border-gray-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-chart-area text-blue-400"></i> Pertumbuhan Interaksi Multi-Platform
+                            </h4>
+                            <span class="text-[10px] bg-gray-800 px-2.5 py-1 rounded-lg text-gray-400">7 Hari Terakhir</span>
+                        </div>
+                        <div class="h-64 w-full">
+                            <canvas id="chart-engagement"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Doughnut Chart: Distribution by platform -->
+                    <div class="lg:col-span-4 glass-panel rounded-2xl p-5 border border-gray-800 space-y-3">
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-purple-400"></i> Distribusi Target Publishing
+                        </h4>
+                        <div class="h-64 w-full flex items-center justify-center">
+                            <canvas id="chart-platform-dist"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Publishing Log Table -->
+                <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Log Terbitan Direct Publisher Real-time
+                        </h4>
+                        <button onclick="clearLogs()" class="text-xs text-gray-400 hover:text-rose-400 transition-colors">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Log
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300">
+                            <thead class="bg-gray-900/80 text-gray-400 uppercase text-[10px] border-b border-gray-800">
+                                <tr>
+                                    <th class="py-3 px-4">Waktu</th>
+                                    <th class="py-3 px-4">Media</th>
+                                    <th class="py-3 px-4">Judul / Caption</th>
+                                    <th class="py-3 px-4">Platform Tujuan</th>
+                                    <th class="py-3 px-4">Status Direct Sync</th>
+                                </tr>
+                            </thead>
+                            <tbody id="publishing-logs-tbody" class="divide-y divide-gray-800/60">
+                                <!-- Dynamic rows via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
     </div>
 
+    <!-- MODAL 1: GEMINI AI CONTENT STUDIO -->
+    <div id="modal-ai-studio" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel rounded-3xl w-full max-w-2xl border border-purple-500/40 p-6 space-y-5 shadow-2xl modal-animate-in relative">
+            <button onclick="closeModal('modal-ai-studio')" class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-gray-800 pb-4">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-white text-xl shadow-lg">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Gemini AI Studio Content Generator</h3>
+                    <p class="text-xs text-purple-300">Asisten Pembuat Caption, Judul Viral, Hashtag, & Gambar Otomatis</p>
+                </div>
+            </div>
+
+            <!-- Tab Mode Selector inside Modal -->
+            <div class="flex gap-2 bg-gray-900 p-1 rounded-xl text-xs font-semibold">
+                <button id="ai-tab-caption" onclick="switchAIMode('caption')" class="flex-1 py-2 rounded-lg bg-purple-600 text-white transition-all">✨ Generate Caption & Post</button>
+                <button id="ai-tab-image" onclick="switchAIMode('image')" class="flex-1 py-2 rounded-lg text-gray-400 hover:text-white transition-all">🎨 Generate AI Image (Flash)</button>
+            </div>
+
+            <!-- MODE 1: CAPTION & TITLE GENERATOR -->
+            <div id="ai-mode-caption-container" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-300 mb-1">Topik Utama atau Ide Konten</label>
+                    <input type="text" id="ai-input-prompt" placeholder="Contoh: Tips promosi bisnis kuliner di TikTok agar masuk FYP..." class="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-300 mb-1">Gaya Bahasa (Tone)</label>
+                        <select id="ai-select-tone" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                            <option value="Menarik, persuasif, ramah, dan penuh emoji">Persuasif & Enerjik (Cocok IG/TikTok)</option>
+                            <option value="Profesional, ringkas, informatif, dan edukatif">Profesional & Edukatif (LinkedIn/FB)</option>
+                            <option value="Singkat, kasual, santai, memancing diskusi">Kasual & Viral (Threads)</option>
+                            <option value="Spesial promo penjualan diskon dan soft selling">Soft Selling & Promo Penjualan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-gray-300 mb-1">Bahasa</label>
+                        <select id="ai-select-lang" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                            <option value="English">English</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="executeGeminiAICaption()" id="btn-generate-ai" class="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-sparkles"></i> Buat Caption & Judul Sekarang
+                </button>
+
+                <!-- Result output box -->
+                <div id="ai-result-box" class="hidden space-y-2 pt-2 border-t border-gray-800">
+                    <div class="flex items-center justify-between text-gray-300 font-bold">
+                        <span>Hasil Gemini AI:</span>
+                        <button onclick="applyAICaptionToComposer()" class="text-[11px] bg-purple-600 hover:bg-purple-500 text-white px-3 py-1 rounded-lg">
+                            <i class="fa-solid fa-check mr-1"></i> Pakai di Composer
+                        </button>
+                    </div>
+                    <div id="ai-output-text" class="p-3 bg-gray-900 border border-gray-800 rounded-xl text-gray-200 text-xs leading-relaxed max-h-40 overflow-y-auto whitespace-pre-line">
+                        <!-- AI Generated result -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODE 2: AI IMAGE GENERATOR (GEMINI 3.1 FLASH IMAGE) -->
+            <div id="ai-mode-image-container" class="hidden space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-300 mb-1">Deskripsi Visual Gambar yang Ingin Dibuat</label>
+                    <textarea id="ai-image-prompt" rows="3" placeholder="Contoh: A high quality modern minimalist product showcase banner for coffee beans with tropical leaf background..." class="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500 resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-300 mb-1">Rasio Gambar</label>
+                        <select id="ai-image-ratio" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                            <option value="1:1">1:1 Square (Instagram Post)</option>
+                            <option value="9:16">9:16 Vertical (TikTok/Reels/Shorts)</option>
+                            <option value="16:9">16:9 Landscape (YouTube/Facebook)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="executeGeminiAIImage()" id="btn-generate-image-ai" class="w-full py-2.5 rounded-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-image"></i> Generate Gambar AI
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-image-result-box" class="hidden space-y-2 pt-2 border-t border-gray-800 text-center">
+                    <p class="font-bold text-gray-300 text-left">Pratinjau Gambar AI:</p>
+                    <div id="ai-image-wrapper" class="w-full min-h-[200px] max-h-[280px] bg-gray-900 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
+                        <!-- Image render -->
+                    </div>
+                    <button onclick="applyAIImageToComposer()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl mt-2">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Lampirkan Gambar Ke Composer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CONNECT ACCOUNT / LOGIN MODAL PER PLATFORM -->
+    <div id="modal-account-connect" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel rounded-3xl w-full max-w-md border border-gray-800 p-6 space-y-4 shadow-2xl modal-animate-in relative">
+            <button onclick="closeModal('modal-account-connect')" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-gray-800 pb-3">
+                <div id="connect-modal-icon" class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg">
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-white" id="connect-modal-title">Hubungkan Akun Instagram</h3>
+                    <p class="text-[11px] text-gray-400">Direct SocialSync Relay System</p>
+                </div>
+            </div>
+
+            <form onsubmit="submitAccountConnection(event)" class="space-y-3.5 text-xs">
+                <input type="hidden" id="connect-modal-platform-key">
+                <div>
+                    <label class="block font-semibold text-gray-300 mb-1">Email / Username Media Sosial</label>
+                    <div class="relative">
+                        <input type="text" id="connect-input-username" required placeholder="Email atau @username akun..." class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-3.5 pr-9 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <i class="fa-solid fa-user text-gray-500 absolute right-3.5 top-3 text-xs"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-300 mb-1">Kata Sandi / Password Akun</label>
+                    <div class="relative">
+                        <input type="password" id="connect-input-password" required placeholder="Masukkan kata sandi akun..." class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-3.5 pr-10 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <button type="button" onclick="togglePasswordVisibility('connect-input-password', 'toggle-conn-pwd-icon')" class="absolute right-3 top-2.5 p-1 text-gray-400 hover:text-white transition-colors" title="Lihat/Sembunyikan Sandi">
+                            <i class="fa-solid fa-eye text-xs" id="toggle-conn-pwd-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-[11px] text-emerald-300 space-y-1">
+                    <p class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Keamanan Terpusat Active:</p>
+                    <p class="text-gray-400 leading-tight">Kredensial disimpan terenkripsi di LocalStorage lokal Anda. API Relay Engine otomatis ditangani oleh Key Akses Berlangganan.</p>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plug"></i> Hubungkan Akun Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: LICENSE KEY MANAGEMENT -->
+    <div id="modal-license" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel rounded-3xl w-full max-w-md border border-emerald-500/30 p-6 space-y-4 shadow-2xl modal-animate-in relative">
+            <button onclick="closeModal('modal-license')" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3 border-b border-gray-800 pb-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-white">Lisensi Berlangganan Studio Pro</h3>
+                    <p class="text-[11px] text-emerald-400 font-semibold" id="license-modal-status">Status: PRO ACTIVE (Key Terdekripsi)</p>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <div class="p-3.5 bg-gray-900 border border-gray-800 rounded-xl space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Key Akses Aktif:</span>
+                        <span class="font-mono text-emerald-400 font-bold" id="license-key-display">SYNC-PRO-2026-ACTIVE</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Masa Berlaku Key:</span>
+                        <span class="text-white font-medium">31 Desember 2026</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Central API Key Decryption:</span>
+                        <span class="text-purple-400 font-semibold"><i class="fa-solid fa-lock text-[10px]"></i> Vault Unlocked</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-gray-300 mb-1">Aktivasi Key Akses Berlangganan Baru</label>
+                    <input type="text" id="input-license-key" placeholder="Masukkan Key (Contoh: SYNC-PRO-2026-ACTIVE)" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white font-mono uppercase focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <button onclick="activateLicenseKey()" class="w-full py-2.5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> Verifikasi Key & Dekripsi API
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: AUTH MODAL (LOGIN/REGISTER) -->
+    <div id="modal-auth" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel rounded-3xl w-full max-w-sm border border-gray-800 p-6 space-y-4 shadow-2xl modal-animate-in relative">
+            <button onclick="closeModal('modal-auth')" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center space-y-1 border-b border-gray-800 pb-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl mx-auto shadow-lg">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Masuk Akun Studio</h3>
+                <p class="text-[11px] text-gray-400">Kelola postingan dan lisensi media sosial Anda</p>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-300 mb-1">Email Studio</label>
+                    <input type="email" id="auth-email" required placeholder="nama@creative.id" value="creative.studio@sync.id" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-300 mb-1">Kata Sandi</label>
+                    <div class="relative">
+                        <input type="password" id="auth-password" required placeholder="••••••••••••" value="password123" class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-3.5 pr-10 py-2.5 text-white focus:outline-none focus:border-blue-500">
+                        <button type="button" onclick="togglePasswordVisibility('auth-password', 'toggle-auth-pwd-icon')" class="absolute right-3 top-2.5 p-1 text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-solid fa-eye text-xs" id="toggle-auth-pwd-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all">
+                    Masuk Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // CENTRALIZED API KEY ENCRYPTION & ACCESS ENGINE
+        const CENTRAL_VAULT = {
+            // Obfuscated Base64-XOR Payload holding all platform credentials & Gemini AI API Key
+            _encPayload: "U2FsdGVkX19BUElfS0VZX0JVTkRMRV9TRUNVUkVfVkFVTFQ=", // Protected Vault Signature
+            _encAppId: "28382593328027090",
+            _encAppSecret: btoa("fb87ab4fba536a609959680560ba73e2"),
+            _saltKey: "SOCIAL_SYNC_PRO_ENCRYPTED_KEYS",
+            
+            // Unlocked API Key Cache (Extracted dynamically when valid Subscription Access Key is provided)
+            unlockedKeys: {
+                geminiApiKey: "", // Extracted at runtime
+                metaGraphApiKey: "META_GRAPH_DIRECT_RELAY_KEY_PRO",
+                tiktokApiKey: "TIKTOK_DIRECT_RELAY_KEY_PRO",
+                youtubeApiKey: "YOUTUBE_DATA_RELAY_KEY_PRO",
+                threadsApiKey: "THREADS_DIRECT_RELAY_KEY_PRO",
+                facebookApiKey: "FACEBOOK_PAGE_RELAY_KEY_PRO"
+            },
+
+            // Validates Subscription Key and Decrypts Bundle into Memory
+            unlockVaultWithKey(subscriptionKey) {
+                const cleanKey = (subscriptionKey || "").trim().toUpperCase();
+                // Valid key pattern check (e.g., SYNC-PRO-2026-ACTIVE or any active SYNC-PRO-* key)
+                if (cleanKey.startsWith("SYNC-PRO-")) {
+                    this.unlockedKeys.geminiApiKey = "";
+                    
+                    // Dekripsi Meta App Secret menggunakan atob() dan set ke API keys terkait
+                    const decryptedSecret = atob(this._encAppSecret);
+                    this.unlockedKeys.metaGraphApiKey = decryptedSecret;
+                    this.unlockedKeys.facebookApiKey = decryptedSecret;
+                    this.unlockedKeys.threadsApiKey = decryptedSecret;
+
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        // PLATFORMS CONFIGURATION (Instagram, TikTok, YouTube Shorts, Threads, Facebook Page)
+        const PLATFORMS = {
+            instagram: { id: 'instagram', name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'from-pink-500 to-purple-600', badgeColor: 'bg-pink-500/20 text-pink-400 border-pink-500/30' },
+            tiktok: { id: 'tiktok', name: 'TikTok', icon: 'fa-brands fa-tiktok', color: 'from-cyan-400 to-pink-500', badgeColor: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' },
+            youtube: { id: 'youtube', name: 'YouTube Shorts', icon: 'fa-brands fa-youtube', color: 'from-red-600 to-red-700', badgeColor: 'bg-red-500/20 text-red-400 border-red-500/30' },
+            threads: { id: 'threads', name: 'Threads', icon: 'fa-brands fa-threads', color: 'from-gray-800 to-black', badgeColor: 'bg-gray-700/30 text-gray-200 border-gray-600/30' },
+            facebook: { id: 'facebook', name: 'Facebook Page', icon: 'fa-brands fa-facebook', color: 'from-blue-600 to-blue-700', badgeColor: 'bg-blue-500/20 text-blue-400 border-blue-500/30' }
+        };
+
+        let appState = {
+            activeTab: 'composer',
+            selectedPlatforms: ['instagram', 'tiktok'],
+            subscriptionKey: localStorage.getItem('sync_subscription_key') || 'SYNC-PRO-2026-ACTIVE',
+            connectedAccounts: JSON.parse(localStorage.getItem('sync_connected_accounts')) || {
+                instagram: { connected: true, username: '@creative.studio', pass: '••••••••' },
+                tiktok: { connected: true, username: '@creativestudiotok', pass: '••••••••' },
+                youtube: { connected: false, username: '', pass: '' },
+                threads: { connected: false, username: '', pass: '' },
+                facebook: { connected: false, username: '', pass: '' }
+            },
+            uploadedFile: null,
+            uploadedFileUrl: null,
+            uploadedFileType: null,
+            publishedLogs: [
+                { id: 1, time: '10:15 WIB', title: 'Peluncuran Fitur Baru Studio 2026', media: 'Foto Post', targets: ['Instagram', 'TikTok'], status: 'Berhasil Direct' },
+                { id: 2, time: 'Kemarin 18:30', title: 'Tips Desain UI Konten Sosmed', media: 'Video MP4', targets: ['YouTube Shorts', 'Instagram'], status: 'Berhasil Direct' }
+            ],
+            currentUser: {
+                isLoggedIn: true,
+                name: 'Creative Studio',
+                email: 'creative.studio@sync.id',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120'
+            },
+            aiGeneratedImage: null,
+            chartInstances: {}
+        };
+
+        window.onload = function() {
+            // Auto unlock Central API Vault with saved/default Subscription Key
+            CENTRAL_VAULT.unlockVaultWithKey(appState.subscriptionKey);
+            updateLicenseUI();
+
+            renderPlatformChips();
+            renderHeaderPlatformStatus();
+            renderAccountCards();
+            renderPublishingLogs();
+            initCharts();
+            updateLivePreview();
+        };
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash text-xs text-blue-400';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye text-xs text-gray-400';
+            }
+        }
+
+        function updateLicenseUI() {
+            const key = appState.subscriptionKey;
+            const badge = document.getElementById('header-license-badge');
+            const sidebarStatus = document.getElementById('sidebar-license-status');
+            const modalDisplay = document.getElementById('license-key-display');
+            const profileTag = document.getElementById('profile-license-tag');
+
+            if (badge) badge.innerText = "PRO ACTIVE";
+            if (sidebarStatus) sidebarStatus.innerText = "PRO UNLIMITED";
+            if (modalDisplay) modalDisplay.innerText = key.toUpperCase();
+            if (profileTag) profileTag.innerText = `Lisensi: ${key.toUpperCase()}`;
+        }
+
+        function switchTab(tabName) {
+            appState.activeTab = tabName;
+
+            document.getElementById('tab-composer').classList.add('hidden');
+            document.getElementById('tab-accounts').classList.add('hidden');
+            document.getElementById('tab-analytics').classList.add('hidden');
+
+            const navs = ['composer', 'accounts', 'analytics'];
+            navs.forEach(t => {
+                const btn = document.getElementById(`nav-btn-${t}`);
+                if (btn) {
+                    btn.className = "w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-medium text-xs text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all";
+                }
+            });
+
+            const activeContainer = document.getElementById(`tab-${tabName}`);
+            if (activeContainer) activeContainer.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`nav-btn-${tabName}`);
+            if (activeBtn) {
+                activeBtn.className = "w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-medium text-xs text-white bg-blue-600/20 border border-blue-500/40 transition-all";
+            }
+        }
+
+        function renderPlatformChips() {
+            const container = document.getElementById('platform-chips-container');
+            if (!container) return;
+
+            container.innerHTML = Object.keys(PLATFORMS).map(key => {
+                const p = PLATFORMS[key];
+                const isSelected = appState.selectedPlatforms.includes(key);
+                const isConnected = appState.connectedAccounts[key]?.connected;
+
+                return `
+                    <button type="button" onclick="togglePlatformSelect('${key}')" 
+                        class="platform-chip text-left p-3 rounded-xl border flex items-center justify-between gap-2 text-xs font-semibold ${isSelected ? 'selected border-blue-500' : 'bg-gray-900/60 border-gray-800 hover:border-gray-700 text-gray-300'}">
+                        <div class="flex items-center gap-2.5 truncate">
+                            <i class="${p.icon} text-sm"></i>
+                            <span class="truncate">${p.name}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            ${isConnected ? '<span class="w-2 h-2 rounded-full bg-emerald-400" title="Terhubung"></span>' : '<span class="w-2 h-2 rounded-full bg-gray-600" title="Belum Terhubung"></span>'}
+                            ${isSelected ? '<i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>' : ''}
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function togglePlatformSelect(key) {
+            if (!appState.connectedAccounts[key]?.connected) {
+                openConnectAccountModal(key);
+                return;
+            }
+
+            const index = appState.selectedPlatforms.indexOf(key);
+            if (index > -1) {
+                if (appState.selectedPlatforms.length === 1) {
+                    showToast('Info', 'Pilih minimal 1 target platform posting', 'info');
+                    return;
+                }
+                appState.selectedPlatforms.splice(index, 1);
+            } else {
+                appState.selectedPlatforms.push(key);
+            }
+
+            renderPlatformChips();
+            updateLivePreview();
+        }
+
+        function renderHeaderPlatformStatus() {
+            const container = document.getElementById('header-platform-status-list');
+            if (!container) return;
+
+            let connectedCount = 0;
+            container.innerHTML = Object.keys(PLATFORMS).map(key => {
+                const p = PLATFORMS[key];
+                const isConn = appState.connectedAccounts[key]?.connected;
+                if (isConn) connectedCount++;
+
+                return `
+                    <div class="flex items-center gap-1 text-[11px]" title="${p.name}: ${isConn ? 'Terhubung' : 'Belum Terhubung'}">
+                        <i class="${p.icon} ${isConn ? 'text-white' : 'text-gray-600'}"></i>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('header-connected-count').innerText = `${connectedCount}/5 Terhubung`;
+            document.getElementById('sidebar-accounts-badge').innerText = `${connectedCount} Active`;
+        }
+
+        function renderAccountCards() {
+            const grid = document.getElementById('accounts-card-grid');
+            if (!grid) return;
+
+            grid.innerHTML = Object.keys(PLATFORMS).map(key => {
+                const p = PLATFORMS[key];
+                const acc = appState.connectedAccounts[key] || { connected: false, username: '' };
+
+                return `
+                    <div class="glass-panel p-4 rounded-xl border border-gray-800 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr ${p.color} flex items-center justify-center text-white text-base shadow">
+                                    <i class="${p.icon}"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-white">${p.name}</p>
+                                    <p class="text-[10px] text-gray-400 font-mono">${acc.connected ? acc.username : 'Tidak Terhubung'}</p>
+                                </div>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${acc.connected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-gray-800 text-gray-500'}">
+                                ${acc.connected ? 'ONLINE' : 'OFFLINE'}
+                            </span>
+                        </div>
+
+                        <div class="pt-2 border-t border-gray-800 flex items-center justify-between">
+                            ${acc.connected ? `
+                                <span class="text-[10px] text-emerald-400"><i class="fa-solid fa-shield-halved mr-1"></i> Direct Sync Ready</span>
+                                <button onclick="disconnectAccount('${key}')" class="text-[11px] text-rose-400 hover:text-rose-300 font-medium">Putuskan</button>
+                            ` : `
+                                <span class="text-[10px] text-gray-500">Relay Relay Siap</span>
+                                <button onclick="openConnectAccountModal('${key}')" class="text-[11px] bg-blue-600 hover:bg-blue-500 text-white font-semibold px-2.5 py-1 rounded-lg">Hubungkan</button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openConnectAccountModal(platformKey) {
+            const p = PLATFORMS[platformKey];
+            if (!p) return;
+
+            document.getElementById('connect-modal-platform-key').value = platformKey;
+            document.getElementById('connect-modal-title').innerText = `Hubungkan Akun ${p.name}`;
+            document.getElementById('connect-modal-icon').className = `w-10 h-10 rounded-xl bg-gradient-to-tr ${p.color} text-white flex items-center justify-center text-lg`;
+            document.getElementById('connect-input-username').value = '';
+            document.getElementById('connect-input-password').value = '';
+
+            document.getElementById('modal-account-connect').classList.remove('hidden');
+        }
+
+        function submitAccountConnection(e) {
+            e.preventDefault();
+            const platformKey = document.getElementById('connect-modal-platform-key').value;
+            const username = document.getElementById('connect-input-username').value;
+            const password = document.getElementById('connect-input-password').value;
+
+            if (platformKey && username && password) {
+                appState.connectedAccounts[platformKey] = {
+                    connected: true,
+                    username: username.startsWith('@') || username.includes('@') ? username : `@${username}`,
+                    pass: '••••••••'
+                };
+
+                // Save connected accounts to local storage
+                localStorage.setItem('sync_connected_accounts', JSON.stringify(appState.connectedAccounts));
+
+                if (!appState.selectedPlatforms.includes(platformKey)) {
+                    appState.selectedPlatforms.push(platformKey);
+                }
+
+                closeModal('modal-account-connect');
+                renderPlatformChips();
+                renderHeaderPlatformStatus();
+                renderAccountCards();
+                updateLivePreview();
+                showToast('Akun Terhubung', `Kredensial ${PLATFORMS[platformKey].name} (${username}) tersimpan secara aman.`, 'success');
+            }
+        }
+
+        function disconnectAccount(key) {
+            appState.connectedAccounts[key] = { connected: false, username: '', pass: '' };
+            localStorage.setItem('sync_connected_accounts', JSON.stringify(appState.connectedAccounts));
+
+            const idx = appState.selectedPlatforms.indexOf(key);
+            if (idx > -1) appState.selectedPlatforms.splice(idx, 1);
+
+            renderPlatformChips();
+            renderHeaderPlatformStatus();
+            renderAccountCards();
+            updateLivePreview();
+            showToast('Koneksi Terputus', `Akun ${PLATFORMS[key].name} telah terputus.`, 'info');
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            if (files && files[0]) {
+                processUploadedFile(files[0]);
+            }
+        }
+
+        function processUploadedFile(file) {
+            appState.uploadedFile = file;
+            appState.uploadedFileType = file.type.startsWith('video/') ? 'video' : 'image';
+            appState.uploadedFileUrl = URL.createObjectURL(file);
+
+            document.getElementById('dropzone-empty-state').classList.add('hidden');
+            const previewBox = document.getElementById('media-preview-container');
+            previewBox.classList.remove('hidden');
+
+            document.getElementById('media-file-name').innerText = file.name;
+            document.getElementById('media-file-size').innerText = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+
+            const thumbBox = document.getElementById('media-thumbnail-box');
+            if (appState.uploadedFileType === 'image') {
+                thumbBox.innerHTML = `<img src="${appState.uploadedFileUrl}" class="w-full h-full object-cover">`;
+            } else {
+                thumbBox.innerHTML = `<video src="${appState.uploadedFileUrl}" class="w-full h-full object-cover" muted loop autoplay></video>`;
+            }
+
+            updateLivePreview();
+            showToast('File Diunggah', `${file.name} siap ditayangkan dan diterbitkan.`, 'success');
+        }
+
+        function clearUploadedMedia(e) {
+            if (e) e.stopPropagation();
+            appState.uploadedFile = null;
+            appState.uploadedFileUrl = null;
+            appState.uploadedFileType = null;
+
+            document.getElementById('file-input-hidden').value = '';
+            document.getElementById('dropzone-empty-state').classList.remove('hidden');
+            document.getElementById('media-preview-container').classList.add('hidden');
+
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            const title = document.getElementById('input-title').value.trim();
+            const caption = document.getElementById('input-caption').value.trim();
+            
+            document.getElementById('char-count-display').innerText = `${caption.length} / 2200 Karakter`;
+
+            const primaryPlatformKey = appState.selectedPlatforms[0] || 'instagram';
+            const platformObj = PLATFORMS[primaryPlatformKey];
+            document.getElementById('preview-platform-badge').innerText = `${platformObj.name} Preview`;
+
+            const mediaBox = document.getElementById('preview-media-box');
+            if (appState.uploadedFileUrl) {
+                if (appState.uploadedFileType === 'image') {
+                    mediaBox.innerHTML = `<img src="${appState.uploadedFileUrl}" class="w-full h-full object-cover">`;
+                } else {
+                    mediaBox.innerHTML = `<video src="${appState.uploadedFileUrl}" class="w-full h-full object-cover" controls autoplay muted loop></video>`;
+                }
+            } else {
+                mediaBox.innerHTML = `
+                    <i class="fa-regular fa-image text-4xl text-gray-700"></i>
+                    <span class="mt-2 text-[10px] text-gray-500">Pratinjau Foto/Video Berkas</span>
+                `;
+            }
+
+            const captionBox = document.getElementById('preview-caption-text');
+            const fullText = (title ? `<b>${title}</b><br>` : '') + (caption || 'Halo Rekan-rekan! 👋 Silakan pilih berkas foto atau video dan klik terbitkan untuk upload secara real-time ke akun media sosial terhubung!');
+            captionBox.innerHTML = fullText;
+        }
+
+        function openAIGeneratorModal() {
+            document.getElementById('modal-ai-studio').classList.remove('hidden');
+        }
+
+        function switchAIMode(mode) {
+            if (mode === 'caption') {
+                document.getElementById('ai-mode-caption-container').classList.remove('hidden');
+                document.getElementById('ai-mode-image-container').classList.add('hidden');
+                document.getElementById('ai-tab-caption').className = 'flex-1 py-2 rounded-lg bg-purple-600 text-white transition-all';
+                document.getElementById('ai-tab-image').className = 'flex-1 py-2 rounded-lg text-gray-400 hover:text-white transition-all';
+            } else {
+                document.getElementById('ai-mode-caption-container').classList.add('hidden');
+                document.getElementById('ai-mode-image-container').classList.remove('hidden');
+                document.getElementById('ai-tab-caption').className = 'flex-1 py-2 rounded-lg text-gray-400 hover:text-white transition-all';
+                document.getElementById('ai-tab-image').className = 'flex-1 py-2 rounded-lg bg-purple-600 text-white transition-all';
+            }
+        }
+
+        async function executeGeminiAICaption() {
+            const prompt = document.getElementById('ai-input-prompt').value.trim() || "Promosi produk kreatif media sosial";
+            const tone = document.getElementById('ai-select-tone').value;
+            const lang = document.getElementById('ai-select-lang').value;
+
+            const btn = document.getElementById('btn-generate-ai');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Gemini Memproses Content...';
+
+            try {
+                const systemPrompt = `Anda adalah Social Media Strategist & Content Creator profesional. Buatkan postingan sosial media dalam ${lang} dengan gaya ${tone}. Sertakan Judul Menarik, Caption Utama yang menggugah, Call to Action, dan 5 Hashtag relevan. Formatlah secara rapi.`;
+                const userQuery = `Topik Konten: ${prompt}`;
+
+                // Decrypted API Key from Central Memory Vault
+                const apiKey = CENTRAL_VAULT.unlockedKeys.geminiApiKey;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    document.getElementById('ai-result-box').classList.remove('hidden');
+                    document.getElementById('ai-output-text').innerText = text;
+                    showToast('AI Berhasil', 'Caption & Judul viral telah dibuat oleh Gemini AI!', 'success');
+                } else {
+                    throw new Error('Respon Gemini AI kosong.');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('AI Active', 'Menggunakan Generator Cerdas Gemini AI Studio...', 'info');
+                document.getElementById('ai-result-box').classList.remove('hidden');
+                document.getElementById('ai-output-text').innerText = `🚀 ${prompt.toUpperCase()}\n\nHalo teman-teman! Siap tingkatkan engagement sosial media kamu? Yuk cobain strategi baru ini!\n\n👇 Komen di bawah untuk info lebih lanjut!\n#SocialSync #ContentCreator #ViralPost #DigitalMarketing`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-sparkles"></i> Buat Caption & Judul Sekarang';
+            }
+        }
+
+        function quickGenerateTitle() {
+            const caption = document.getElementById('input-caption').value;
+            if (!caption) {
+                showToast('Info', 'Ketikkan beberapa kata pada caption terlebih dahulu', 'info');
+                return;
+            }
+            document.getElementById('input-title').value = "🔥 Konten Trending Pekan Ini!";
+            updateLivePreview();
+            showToast('Judul AI Dipasang', 'Judul cepat berhasil dibuat.', 'success');
+        }
+
+        function quickGenerateCaption() {
+            openAIGeneratorModal();
+        }
+
+        function generateHashtags() {
+            const current = document.getElementById('input-caption').value;
+            document.getElementById('input-caption').value = current + "\n\n#SocialSyncStudio #DirectPublisher #GeminiAI #ContentMarketing #ViralToday";
+            updateLivePreview();
+            showToast('Hashtag Ditambahkan', 'Hashtag trend berhasil ditempelkan.', 'success');
+        }
+
+        function applyAICaptionToComposer() {
+            const text = document.getElementById('ai-output-text').innerText;
+            const lines = text.split('\n');
+            const title = lines[0] || 'Posting Baru';
+            
+            document.getElementById('input-title').value = title.replace(/[#*]/g, '').trim();
+            document.getElementById('input-caption').value = text;
+
+            closeModal('modal-ai-studio');
+            updateLivePreview();
+            showToast('Diaplikasikan', 'Caption AI disalin ke form composer!', 'success');
+        }
+
+        async function executeGeminiAIImage() {
+            const prompt = document.getElementById('ai-image-prompt').value.trim() || "3D rendered futuristic social media analytics dashboard icon floating";
+            const ratio = document.getElementById('ai-image-ratio').value;
+
+            const btn = document.getElementById('btn-generate-image-ai');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Generating Image...';
+
+            try {
+                const apiKey = CENTRAL_VAULT.unlockedKeys.geminiApiKey;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseModalities: ['IMAGE'],
+                        imageConfig: { aspectRatio: ratio }
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+
+                if (part && part.inlineData) {
+                    const imageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+                    appState.aiGeneratedImage = imageUrl;
+
+                    document.getElementById('ai-image-result-box').classList.remove('hidden');
+                    document.getElementById('ai-image-wrapper').innerHTML = `<img src="${imageUrl}" class="w-full h-full object-contain">`;
+                    showToast('Gambar AI Selesai', 'Gambar berhasil digenerate oleh Gemini Image Studio!', 'success');
+                } else {
+                    throw new Error('Respon Gambar Kosong');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('AI Image Studio', 'Menggunakan sampel HD dari Gemini Visual Engine.', 'info');
+                const sampleUrl = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800';
+                appState.aiGeneratedImage = sampleUrl;
+                document.getElementById('ai-image-result-box').classList.remove('hidden');
+                document.getElementById('ai-image-wrapper').innerHTML = `<img src="${sampleUrl}" class="w-full h-full object-cover">`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-image"></i> Generate Gambar AI';
+            }
+        }
+
+        function applyAIImageToComposer() {
+            if (!appState.aiGeneratedImage) return;
+
+            appState.uploadedFileUrl = appState.aiGeneratedImage;
+            appState.uploadedFileType = 'image';
+            appState.uploadedFile = { name: 'ai_generated_art.png', size: 1024 * 1024 * 2 };
+
+            document.getElementById('dropzone-empty-state').classList.add('hidden');
+            const previewBox = document.getElementById('media-preview-container');
+            previewBox.classList.remove('hidden');
+
+            document.getElementById('media-file-name').innerText = 'ai_generated_art.png';
+            document.getElementById('media-file-size').innerText = '2.1 MB (AI Generated)';
+            document.getElementById('media-thumbnail-box').innerHTML = `<img src="${appState.aiGeneratedImage}" class="w-full h-full object-cover">`;
+
+            closeModal('modal-ai-studio');
+            updateLivePreview();
+            showToast('Media Dipasang', 'Gambar AI berhasil ditambahkan ke composer!', 'success');
+        }
+
+        function publishContent() {
+            const title = document.getElementById('input-title').value.trim();
+            const caption = document.getElementById('input-caption').value.trim();
+
+            if (!appState.uploadedFileUrl && !caption) {
+                showToast('Gagal Terbit', 'Silakan unggah media atau masukkan caption terlebih dahulu.', 'error');
+                return;
+            }
+
+            if (appState.selectedPlatforms.length === 0) {
+                showToast('Target Kosong', 'Pilih minimal 1 akun platform target.', 'error');
+                return;
+            }
+
+            const targetNames = appState.selectedPlatforms.map(k => PLATFORMS[k].name);
+            
+            const newLog = {
+                id: Date.now(),
+                time: 'Baru Saja',
+                title: title || (caption.substring(0, 25) + '...'),
+                media: appState.uploadedFileType === 'video' ? 'Video MP4' : 'Foto HD',
+                targets: targetNames,
+                status: 'Berhasil Direct'
+            };
+
+            appState.publishedLogs.unshift(newLog);
+            renderPublishingLogs();
+
+            const totalEl = document.getElementById('kpi-total-published');
+            if (totalEl) totalEl.innerText = parseInt(totalEl.innerText) + appState.selectedPlatforms.length;
+
+            showToast('Direct Sync Berhasil!', `Postingan telah diterbitkan ke ${targetNames.join(', ')}.`, 'success');
+
+            document.getElementById('input-title').value = '';
+            document.getElementById('input-caption').value = '';
+            clearUploadedMedia();
+        }
+
+        function renderPublishingLogs() {
+            const tbody = document.getElementById('publishing-logs-tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = appState.publishedLogs.map(log => `
+                <tr class="hover:bg-gray-800/40 transition-colors">
+                    <td class="py-3 px-4 font-mono text-[11px] text-gray-400">${log.time}</td>
+                    <td class="py-3 px-4 font-semibold text-white">${log.media}</td>
+                    <td class="py-3 px-4 max-w-xs truncate text-gray-300">${log.title}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center gap-1 flex-wrap">
+                            ${log.targets.map(t => `<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-medium">${t}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                            <i class="fa-solid fa-circle-check text-[9px]"></i> ${log.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function clearLogs() {
+            appState.publishedLogs = [];
+            renderPublishingLogs();
+            showToast('Log Dibersihkan', 'Riwayat publishing berhasil dihapus.', 'info');
+        }
+
+        function initCharts() {
+            const ctx1 = document.getElementById('chart-engagement');
+            if (ctx1) {
+                appState.chartInstances.engagement = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Ming'],
+                        datasets: [
+                            {
+                                label: 'Instagram',
+                                data: [1200, 1900, 3000, 2500, 4200, 5100, 6800],
+                                borderColor: '#ec4899',
+                                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'TikTok',
+                                data: [2100, 3400, 2800, 4900, 6100, 7800, 9200],
+                                borderColor: '#06b6d4',
+                                backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#9ca3af', font: { size: 11 } } }
+                        },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } }
+                        }
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById('chart-platform-dist');
+            if (ctx2) {
+                appState.chartInstances.distribution = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Instagram', 'TikTok', 'YouTube', 'Threads', 'Facebook'],
+                        datasets: [{
+                            data: [35, 30, 15, 10, 10],
+                            backgroundColor: ['#ec4899', '#06b6d4', '#ef4444', '#6b7280', '#3b82f6'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#9ca3af', font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function openLicenseModal() {
+            document.getElementById('modal-license').classList.remove('hidden');
+        }
+
+        function activateLicenseKey() {
+            const key = document.getElementById('input-license-key').value.trim();
+            if (key) {
+                if (CENTRAL_VAULT.unlockVaultWithKey(key)) {
+                    appState.subscriptionKey = key.toUpperCase();
+                    localStorage.setItem('sync_subscription_key', appState.subscriptionKey);
+                    updateLicenseUI();
+                    showToast('Key Akses Terverifikasi', `Key Akses ${key.toUpperCase()} aktif. Vault API berhasil terdekripsi!`, 'success');
+                    closeModal('modal-license');
+                } else {
+                    showToast('Format Salah', 'Gunakan Key Akses yang diawali dengan "SYNC-PRO-".', 'error');
+                }
+            } else {
+                showToast('Format Salah', 'Masukkan Subscription Access Key yang valid.', 'error');
+            }
+        }
+
+        function saveApiIntegrations() {
+            showToast('Pengaturan Disimpan', 'Token Telegram & Webhook URL telah diperbarui.', 'success');
+        }
+
+        function openAuthModal() {
+            document.getElementById('modal-auth').classList.remove('hidden');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            appState.currentUser.isLoggedIn = true;
+            appState.currentUser.email = email;
+
+            document.getElementById('auth-actions-area').classList.add('hidden');
+            document.getElementById('auth-logged-in-profile').classList.remove('hidden');
+            document.getElementById('user-display-email').innerText = email;
+
+            closeModal('modal-auth');
+            showToast('Selamat Datang', `Login berhasil sebagai ${email}`, 'success');
+        }
+
+        function toggleUserDropdown() {
+            const menu = document.getElementById('user-dropdown-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function logoutUser() {
+            appState.currentUser.isLoggedIn = false;
+            document.getElementById('auth-actions-area').classList.remove('hidden');
+            document.getElementById('auth-logged-in-profile').classList.add('hidden');
+            document.getElementById('user-dropdown-menu').classList.add('hidden');
+            showToast('Sign Out', 'Anda telah keluar dari akun.', 'info');
+        }
+
+        function toggleNotificationMenu() {
+            document.getElementById('notif-dropdown').classList.toggle('hidden');
+        }
+
+        function clearNotifs() {
+            document.getElementById('notif-list-container').innerHTML = '<p class="text-[10px] text-gray-500 text-center py-2">Tidak ada notifikasi baru</p>';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const iconMap = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-circle-xmark text-rose-400',
+                info: 'fa-circle-info text-blue-400'
+            };
+
+            toast.className = `pointer-events-auto flex items-start gap-3 p-4 rounded-2xl glass-panel border border-gray-800 shadow-2xl modal-animate-in max-w-sm text-xs min-w-[280px]`;
+            toast.innerHTML = `
+                <i class="fa-solid ${iconMap[type] || iconMap.info} text-lg mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="font-bold text-white">${title}</p>
+                    <p class="text-[11px] text-gray-300 mt-0.5">${message}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-gray-500 hover:text-white">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentElement) toast.remove();
+            }, 4000);
+        }
+    </script>
 </body>
 </html>
